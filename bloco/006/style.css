@@ -1,0 +1,109 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #444444;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
+p {
+  margin: 0 0 1rem;
+  line-height: 1.4;
+}
+
+ul img, ol img {
+  width: 150px;
+  height: 200px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 10px;
+}
+
+header h1 {
+  display: inline-block;
+  padding: 1rem;
+  background-color: black;
+  border-radius: 0 0 20px 0;
+  color: white;
+}
+
+.navbar ul {
+  display: flex;
+  list-style-type: none;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.navbar li {
+  padding: 1rem;
+}
+
+.navbar a {
+  color: rgb(192, 192, 28);
+}
+
+main {
+  padding: 0 2rem;
+}
+
+section {
+  margin: 3rem auto;
+}
+
+section h2 {
+  margin: 0 0 2rem;
+  color: rgb(3, 184, 3);
+}
+
+#sobre .text-box {
+  background-color: rgba(228, 228, 228, 0.548);
+  border: 1px solid rgba(128, 128, 128, 0.452);
+}
+
+.blue-txt {
+  color: rgb(18, 72, 250);
+}
+
+.red-txt {
+  color: red;
+}
+
+.purple-txt {
+  color: purple;
+}
+
+#list-filiais {
+  list-style-type: none;
+  text-align: center;
+  font-weight: bold;
+  font-style: italic;
+}
+
+#list-filiais li {
+  margin: 0 0 1rem;
+}
+
+#list-livros ul {
+  list-style-type: square;
+  margin-left: 1.5rem;
+  font-style: italic;
+}
+
+#list-autores {
+  list-style-type: upper-roman;
+  color: orange;
+}
+
+#list-autores li {
+  padding-left: 1.5rem;
+  background-color: rgba(207, 207, 207, 0.473);
+}

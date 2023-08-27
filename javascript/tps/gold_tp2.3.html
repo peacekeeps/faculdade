@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        min-width: 500px;
+      }
+
+      button {
+        cursor: pointer;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+      }
+
+      .main-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-rows: 50px;
+        gap: 0.5rem;
+        justify-items: center;
+        width: 300px;
+        margin: auto;
+        padding: 0.5rem;
+        padding-bottom: 1.5rem;
+        border: 2px solid black;
+        border-radius: 5%;
+      }
+
+      #screen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: end;
+        justify-self: normal;
+
+        grid-column: 1 / span 3;
+        grid-row: 1 / span 2;
+        height: 80px;
+
+        padding: 0.5rem 1rem;
+        border: 2px inset rgba(0, 0, 0, 0.514);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .number[data-num="0"] {
+        grid-column: 2;
+      }
+
+      button[data-op="equal"] {
+        border-radius: 10px;
+        width: 80%;
+        grid-column: 2 / span 2;
+      }
+
+      button[data-op="undo"] {
+        font-size: 2em;
+      }
+
+      #screen div {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        height: 100%;
+        width: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1.2em;
+      }
+
+      #screen #upper-screen {
+        font-size: 1em;
+        color: rgb(77, 77, 77);
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-box">
+      <div id="screen">
+        <div id="upper-screen"></div>
+        <div id="main-screen"></div>
+      </div>
+
+      <button class="number" data-num="1">1</button>
+      <button class="number" data-num="2">2</button>
+      <button class="number" data-num="3">3</button>
+      <button class="number" data-num="4">4</button>
+      <button class="number" data-num="5">5</button>
+      <button class="number" data-num="6">6</button>
+      <button class="number" data-num="7">7</button>
+      <button class="number" data-num="8">8</button>
+      <button class="number" data-num="9">9</button>
+      <button class="number" data-num="0">0</button>
+      <button class="operation" data-op="negative">-n</button>
+      <button class="operation" data-op="undo">➡</button>
+      <button class="operation" data-op="plus">+</button>
+      <button class="operation" data-op="minus">-</button>
+      <button class="operation" data-op="times">x</button>
+      <button class="operation" data-op="divided">/</button>
+
+      <button class="operation" data-op="equal">=</button>
+    </div>
+    <script>
+      const mainScreen = document.getElementById("main-screen");
+      const upperScreen = document.getElementById("upper-screen");
+      const numbers = document.querySelectorAll(".number");
+      const operations = document.querySelectorAll(".operation");
+      const operationsObj = {
+        plus: (x, y) => {
+          return x + y;
+        },
+        minus: (x, y) => {
+          return x - y;
+        },
+        times: (x, y) => {
+          return x * y;
+        },
+        divided: (x, y) => {
+          return x / y;
+        },
+        equal: (x, y) => {
+          return x;
+        },
+      };
+      let equal = true;
+      let operandX; // It tells the code that there is a number waiting for operandY to calculate
+      let negative = false;
+
+      let currentOp = "before";
+
+      numbers.forEach(function (number) {
+        number.addEventListener("click", (e) => {
+          if (mainScreen.textContent.length <= 16) {
+            let newNumber = typeNumber(e);
+            mainScreen.textContent += newNumber;
+          }
+        });
+      });
+
+      operations.forEach(function (operation) {
+        operation.addEventListener("click", (e) => {
+          operate(e);
+        });
+      });
+
+      function typeNumber(e) {
+        if (equal === true) {
+          mainScreen.textContent = "";
+          upperScreen.textContent = "";
+          equal = false;
+        }
+        return e.target.dataset.num;
+      }
+
+      function operate(e) {
+
+        // falta definir o operador -n
+
+        if (
+          e.target.dataset.op === "undo" &&
+          mainScreen.textContent > 0 /*somente se houver texto para apagar*/
+        ) {
+          //UNDO OP
+
+          let str = mainScreen.textContent;
+          // converte o texto para string
+
+          str = str.slice(0, -1);
+          // retorna todos os caracteres da string - 1 no fim
+
+          mainScreen.textContent = str;
+        } else if (e.target.dataset.op === "equal") {
+          // EQUAL OP
+
+          if (operandX !== undefined) {
+            // Se existe um operandX (undefined foi o único jeito dele aceitar negativos)
+
+            if (mainScreen.textContent.length > 0) {
+              // Se existe texto na mScreen
+
+              console.log("operandX !== undefined e mScreen length > 0");
+
+              let operandY = Number(mainScreen.textContent);
+
+              operandX = operationsObj[currentOp](operandX, operandY);
+
+              upperScreen.textContent = `${operandX}`;
+
+              equal = true;
+
+              operandX = 0;
+
+              operandY = 0;
+            }
+          }
+        } else if (
+          e.target.dataset.op !== "undo" &&
+          e.target.dataset.op !== "equal"
+        ) {
+          // Todas as operações restantes
+
+          if (operandX !== undefined) {
+            // Se existe um operandX
+
+            if (mainScreen.textContent.length > 0) {
+              // se existe texto na mScreen && operandX
+
+              let operandY = Number(mainScreen.textContent);
+
+              operandX = operationsObj[currentOp](operandX, operandY);
+              // operandX recebe resultado
+
+              currentOp = e.target.dataset.op;
+              // atualiza o operador (!) após operação
+
+              upperScreen.textContent = `${operandX} ${e.target.textContent} `;
+
+            } else {
+              // não existe texto na mScreen && operandX
+
+              currentOp = e.target.dataset.op;
+
+              upperScreen.textContent = `${operandX} ${e.target.textContent} `;
+
+            }
+
+          } else {
+            // se não tem nada na upperScreen
+
+            if (mainScreen.textContent.length > 0) {
+              // se existe texto na mScreen
+
+              currentOp = e.target.dataset.op;
+              // atualiza o operador
+
+              operandX = Number(mainScreen.textContent);
+
+              upperScreen.textContent += `${operandX} ${e.target.textContent} `;
+              // atualiza o upScreen com operandX e operator
+
+            } 
+            
+            // se não existe texto na mScreen && !operandX, então nada acontece
+          
+          }
+        }
+        mainScreen.textContent = "";
+        // limpa a tela após as operações
+      }
+    </script>
+  </body>
+</html>

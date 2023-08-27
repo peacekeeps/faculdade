@@ -1,0 +1,53 @@
+PARSEINT E PARSEFLOAT
+  Convertem um valor em inteiro ou decimal (no caso de números decimais).
+
+Conversão de Strings
+
+  str = "300.3 reais";
+
+  parseFloat(str); parseInt(str)
+  ==> 300.3, 300
+
+  str = "R$ 300.3"; 
+  parseFloat(str); parseInt(str)
+  ==> NaN
+
+Convertendo inteiros para float com toFixed()
+  toFixed recebe um argumento que determina quantas casas serão adicionadas ao número.
+
+  str = 14;
+
+  str.toFixed(1);
+  ==> 14.0
+
+  str = 14.6
+
+  str.toFixed();
+  ==> 15 //regra de arredondamento
+
+OPERADORES DE COMPARAÇÃO
+
+  Soft Equality ==
+  Compara dados de diferentes tipos realizando uma conversão. Pode gerar resultados inesperados:
+
+  "   " == 0;
+  ==> true
+
+  false == 0;
+  ==> true
+
+  Coesão de tipos
+    Existe uma regra para coesão de tipos:
+
+    x == y
+
+    Se x for number e y for string ou booleano, então x === Number(y)
+
+    Para truthys e falsys, é fácil entender o que vai acontecer.
+
+    "true" == true 
+    ==> false
+
+    Isso porque ao converter ambos para numero, true converte para 1 e "true" converte para NaN.
+    
+  Hard Equality ===

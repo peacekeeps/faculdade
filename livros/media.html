@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .audio-player,
+        .audio-controls,
+        button {
+            color: rgb(58, 58, 58);
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .audio-controls {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 300px;
+            height: 50px;
+            padding: .5rem;
+            background-color: rgba(138, 202, 255, 0.541);
+            border: 1px inset #eeeeee;
+            border-radius: 10px;
+        }
+
+        button {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 30px;
+            width: 80px;
+            background-color: rgb(177, 239, 255);
+            border: 1px inset #bbb;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        [data-state="playing"] #play,
+        [data-state="paused"] #pause { /* Quando estiver tocando, o play some e vice versa */
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<!--
+=================== 
+Audio 
+===================
+-->
+
+<div class="audio-player">
+    <audio src="data/abstract-future-bass-162604.mp3" id="audio-1">
+        Esse áudio não é suportado pelo seu navegador.
+    </audio>
+    <div class="audio-controls">
+        <button id="play">Play</button>
+        <button id="pause">Pause</button>
+        <div class="audio-status">
+            <span id="played">00:00</span>
+            /
+            <span id="duration">00:00</span>
+        </div>
+    </div>
+</div>
+<script>
+    const audioPlayer = document.querySelector(".audio-player");
+    const audio1 = document.getElementById("audio-1");
+    const playBtn = document.getElementById("play");
+    const pauseBtn = document.getElementById("pause");
+    const duration = document.getElementById("duration");
+    const played = document.getElementById("played");
+
+    audioPlayer.dataset.state = "paused";
+
+    playBtn.addEventListener("click", () => {
+        if (audioPlayer.dataset.state === "paused") {
+            audio1.play();
+        
+            audioPlayer.dataset.state = "playing";
+        }
+    });
+    pauseBtn.addEventListener("click", () => {
+        if (audioPlayer.dataset.state === "playing") {
+            audio1.pause();
+        
+            audioPlayer.dataset.state = "paused";
+        }
+    });
+    audio1.addEventListener("loadedmetadata", () => {
+        duration.textContent = formatTime(audio1.duration);
+    });
+    audio1.addEventListener("timeupdate", (event) => {
+        played.textContent = formatTime(audio1.currentTime);
+    });
+
+    function formatTime(time) {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.round(time) % 60;
+        
+        return `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+    }
+</script>
+</body>
+</html>
+
