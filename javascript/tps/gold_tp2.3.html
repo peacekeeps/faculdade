@@ -163,8 +163,39 @@
       }
 
       function operate(e) {
+        // -n OP
+        if (
+          e.target.dataset.op === "negative" &&
+          mainScreen.textContent[0] !== "-"
+        ) {
+          // se op for -n e o primeiro caractere não for "-"
 
-        // falta definir o operador -n
+          if (mainScreen.textContent.length > 0) {
+            // Se houver texto na mScreen
+
+            mainScreen.textContent = `-${mainScreen.textContent}`;
+
+            return;
+          } else {
+            // se não houver texto
+
+            mainScreen.textContent = "-";
+
+            equal = false;
+            // para que ao digitar outro número o sinal de menos não desapareça
+
+            return;
+          }
+        } else if (
+          e.target.dataset.op === "negative" &&
+          mainScreen.textContent[0] === "-"
+        ) {
+          // se op for -n e o primeiro caractere for "-"
+
+          mainScreen.textContent = mainScreen.textContent.slice(1);
+
+          return;
+        }
 
         if (
           e.target.dataset.op === "undo" &&
@@ -224,16 +255,13 @@
               // atualiza o operador (!) após operação
 
               upperScreen.textContent = `${operandX} ${e.target.textContent} `;
-
             } else {
               // não existe texto na mScreen && operandX
 
               currentOp = e.target.dataset.op;
 
               upperScreen.textContent = `${operandX} ${e.target.textContent} `;
-
             }
-
           } else {
             // se não tem nada na upperScreen
 
@@ -247,13 +275,13 @@
 
               upperScreen.textContent += `${operandX} ${e.target.textContent} `;
               // atualiza o upScreen com operandX e operator
+            }
 
-            } 
-            
             // se não existe texto na mScreen && !operandX, então nada acontece
-          
           }
         }
+
+        // Bug: está apagando todo o conteúdo sempre
         mainScreen.textContent = "";
         // limpa a tela após as operações
       }
